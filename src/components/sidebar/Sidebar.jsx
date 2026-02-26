@@ -21,6 +21,10 @@ import {
   HomeIcon,
   ViewColumnsIcon,
   ListBulletIcon,
+  StarIcon,
+  BoltIcon,
+  Squares2X2Icon,
+  FolderOpenIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
@@ -71,15 +75,27 @@ const Sidebar = () => {
                 </Link>
               <ListItem>
                 <ListItemPrefix>
-                  <ListBulletIcon class="h-6 w-6 text-gray-500" />
+                  <Squares2X2Icon class="h-6 w-6 text-gray-500" />
                 </ListItemPrefix>
                 Category
               </ListItem>
               <ListItem>
                 <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  <FolderOpenIcon class="h-6 w-6 text-gray-500" />
                 </ListItemPrefix>
-                Projects
+                SubCategory
+              </ListItem>
+              <ListItem>
+                <ListItemPrefix>
+                  <BoltIcon class="h-6 w-6 text-gray-500" />
+                </ListItemPrefix>
+                FlashSale
+              </ListItem>
+              <ListItem>
+                <ListItemPrefix>
+                  <StarIcon class="h-6 w-6 text-gray-500" />
+                </ListItemPrefix>
+                BestSelling
               </ListItem>
             </List>
           </AccordionBody>
