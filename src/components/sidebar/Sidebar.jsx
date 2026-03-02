@@ -73,30 +73,38 @@ const Sidebar = () => {
                         Banner
                     </ListItem>
                 </Link>
-              <ListItem>
-                <ListItemPrefix>
-                  <Squares2X2Icon class="h-6 w-6 text-gray-500" />
-                </ListItemPrefix>
-                Category
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <FolderOpenIcon class="h-6 w-6 text-gray-500" />
-                </ListItemPrefix>
-                SubCategory
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <BoltIcon class="h-6 w-6 text-gray-500" />
-                </ListItemPrefix>
-                FlashSale
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <StarIcon class="h-6 w-6 text-gray-500" />
-                </ListItemPrefix>
-                BestSelling
-              </ListItem>
+                <Link to={'/category'}>
+                  <ListItem>
+                    <ListItemPrefix>
+                      <Squares2X2Icon class="h-6 w-6 text-gray-500" />
+                    </ListItemPrefix>
+                    Category
+                  </ListItem>
+                </Link>
+                <Link to={'/subcategory'}>
+                  <ListItem>
+                    <ListItemPrefix>
+                      <FolderOpenIcon class="h-6 w-6 text-gray-500" />
+                    </ListItemPrefix>
+                    SubCategory
+                  </ListItem>
+                </Link>
+                <Link to={'/flashsale'}>
+                  <ListItem>
+                    <ListItemPrefix>
+                      <BoltIcon class="h-6 w-6 text-gray-500" />
+                    </ListItemPrefix>
+                    FlashSale
+                  </ListItem>
+                </Link>
+                <Link to={'/bestselling'}>
+                  <ListItem>
+                    <ListItemPrefix>
+                      <StarIcon class="h-6 w-6 text-gray-500" />
+                    </ListItemPrefix>
+                    BestSelling
+                  </ListItem>
+                </Link>
             </List>
           </AccordionBody>
         </Accordion>
@@ -127,12 +135,14 @@ const Sidebar = () => {
                 </ListItemPrefix>
                 Orders
               </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Products
-              </ListItem>
+              <Link to={'/products'}>
+                <ListItem>
+                  <ListItemPrefix>
+                    <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                  </ListItemPrefix>
+                  Products
+                </ListItem>
+              </Link>
             </List>
           </AccordionBody>
         </Accordion>
