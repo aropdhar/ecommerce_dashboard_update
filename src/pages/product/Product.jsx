@@ -27,25 +27,30 @@ const Product = () => {
                 <input id="dropzone-file" type="file" class="hidden" />
             </label>
            </div> 
-           <div className='flex flex-col w-[30%] gap-y-3'>
-              <Select color="purple" label="Category">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-              </Select>
+           <div className='w-full flex flex-col gap-y-3'>
+              <div className='w-full flex items-start justify-between'>
+                  <div className='flex flex-col w-[45%] gap-y-3'>
+                      <Select color="purple" label="Category">
+                        <Option>Material Tailwind HTML</Option>
+                        <Option>Material Tailwind React</Option>
+                        <Option>Material Tailwind Vue</Option>
+                        <Option>Material Tailwind Angular</Option>
+                        <Option>Material Tailwind Svelte</Option>
+                      </Select>
+                      <Input size="md" label="Product Price" type='number'/>
+                  </div>
+                  <div className='flex flex-col w-[45%] gap-y-3'>
+                    <Select color="purple" label="SubCategory">
+                        <Option>Material Tailwind HTML</Option>
+                        <Option>Material Tailwind React</Option>
+                        <Option>Material Tailwind Vue</Option>
+                        <Option>Material Tailwind Angular</Option>
+                        <Option>Material Tailwind Svelte</Option>
+                      </Select>
+                      <Input size="md" label="Product Discount" type='number'/>
+                  </div>
+              </div>
               <Input size="md" label="Product Price" type='number'/>
-           </div>
-           <div className='flex flex-col w-[30%] gap-y-3'>
-             <Select color="purple" label="SubCategory">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-              </Select>
-              <Input size="md" label="Product Discount" type='number'/>
            </div>
         </div>
       </div>
