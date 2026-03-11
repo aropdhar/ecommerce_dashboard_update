@@ -71,7 +71,7 @@ const Category = () => {
             <Button variant="filled" color='green' loading={false} className='w-[10%]'>
                 Upload
             </Button>
-        {/* banner table list section */}
+        {/* category table list section */}
         
             <Card className="h-[320px] w-full overflow-y-scroll">
                 <table className="w-full min-w-max table-auto text-center">

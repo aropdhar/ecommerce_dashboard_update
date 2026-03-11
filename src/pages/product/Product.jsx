@@ -1,4 +1,4 @@
-import { Input ,Select, Option } from '@material-tailwind/react'
+import { Input ,Select, Option, Button } from '@material-tailwind/react'
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -53,6 +53,9 @@ const Product = () => {
               <Input size="md" label="Product Price" type='number'/>
            </div>
         </div>
+        <Button variant="filled" color='green' loading={false} className='w-[10%]'>
+            Upload
+        </Button>
       </div>
     </div>
   )

@@ -13,6 +13,7 @@ import Subcategory from "./pages/homepage/subcategory/Subcategory";
 import Flashsale from "./pages/homepage/flashsale/Flashsale";
 import BestSelling from "./pages/homepage/bestselling/BestSelling";
 import Product from "./pages/product/Product";
+import ProductList from "./pages/productlist/ProductList";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
        <Route path="/flashsale" element={<Flashsale/>}/>
        <Route path="/bestselling" element={<BestSelling/>}/>
        <Route path="/products" element={<Product/>}/>
+       <Route path="/productlist" element={<ProductList/>}/>
     </Route>
   )
 );
