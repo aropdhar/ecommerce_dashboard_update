@@ -2,94 +2,75 @@ import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter , Select, Option} from '@material-tailwind/react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import images from '../../assets/image.jpeg'
 
 const ContactList = () => {
 
         const [open, setOpen] = useState(false);
         const [value, setValue] = useState('');
         const handleOpen = () => setOpen(!open);
-        const TABLE_HEAD = ["Name", "Description", "Price", "Image" , "Category" , "Subcategory" , "Actions"];
+        const TABLE_HEAD = ["Name", "Email", "Image" , "PhoneNumber" , "Actions"];
          
         const TABLE_ROWS = [
             {
                 name: "Wireless Headphone",
-                description: "High quality noise cancelling headphone",
-                price: "$120",
+                Email: "aropsutradhar@gmail.com",
                 image: "/images/headphone.jpg",
-                category: "Electronics",
-                subcategory: "Audio",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Gaming Mouse",
-                description: "RGB gaming mouse with high DPI",
-                price: "$45",
-                image: "/images/mouse.jpg",
-                category: "Electronics",
-                subcategory: "Accessories",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Smart Watch",
-                description: "Fitness tracking smart watch",
-                price: "$90",
-                image: "/images/watch.jpg",
-                category: "Electronics",
-                subcategory: "Wearables",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Leather Wallet",
-                description: "Premium genuine leather wallet",
-                price: "$35",
-                image: "/images/wallet.jpg",
-                category: "Fashion",
-                subcategory: "Men",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Running Shoes",
-                description: "Comfortable sports running shoes",
-                price: "$75",
-                image: "/images/shoes.jpg",
-                category: "Fashion",
-                subcategory: "Footwear",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Backpack",
-                description: "Durable travel backpack",
-                price: "$60",
-                image: "/images/backpack.jpg",
-                category: "Bags",
-                subcategory: "Travel",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Bluetooth Speaker",
-                description: "Portable bluetooth speaker",
-                price: "$50",
-                image: "/images/speaker.jpg",
-                category: "Electronics",
-                subcategory: "Audio",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Sunglasses",
-                description: "UV protection stylish sunglasses",
-                price: "$25",
-                image: "/images/sunglasses.jpg",
-                category: "Fashion",
-                subcategory: "Accessories",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Laptop Stand",
-                description: "Adjustable aluminum laptop stand",
-                price: "$40",
-                image: "/images/laptop-stand.jpg",
-                category: "Office",
-                subcategory: "Accessories",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
             {
                 name: "Water Bottle",
-                description: "Insulated stainless steel bottle",
-                price: "$20",
-                image: "/images/bottle.jpg",
-                category: "Lifestyle",
-                subcategory: "Daily Use",
+                Email: "aropsutradhar@gmail.com",
+                image: "/images/headphone.jpg",
+                phoneNumber: "01720000000",
             },
         ];
     
@@ -118,7 +99,7 @@ const ContactList = () => {
                 </tr>
             </thead>
             <tbody>
-                {TABLE_ROWS.map(({ name , description , price , image , category , subcategory }, index) => {
+                {TABLE_ROWS.map(({ name , Email , image , phoneNumber }, index) => {
                 const isLast = index === TABLE_ROWS.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50 text-center";
 
@@ -139,8 +120,17 @@ const ContactList = () => {
                         color="blue-gray"
                         className="font-normal"
                         >
-                        {description}
+                        {Email}
                         </Typography>
+                    </td>
+                    <td className={classes}>
+                        <div
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal flex items-center justify-center"
+                        >
+                          <img src={images} alt={images} className='w-14 h-14 object-cover rounded-md ' />
+                        </div>
                     </td>
                     <td className={classes}>
                         <Typography
@@ -148,40 +138,13 @@ const ContactList = () => {
                         color="blue-gray"
                         className="font-normal"
                         >
-                        {price}
-                        </Typography>
-                    </td>
-                    <td className={classes}>
-                        <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        >
-                          <img src={image} alt="Missing" />
-                        </Typography>
-                    </td>
-                    <td className={classes}>
-                        <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        >
-                        {category}
-                        </Typography>
-                    </td>
-                    <td className={classes}>
-                        <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        >
-                        {subcategory}
+                        {phoneNumber}
                         </Typography>
                     </td>
                     <td className={classes}>
                         <div className='flex items-center gap-x-3 justify-center'>
                         <Button color="red">Delete</Button>
-                        <Button onClick={handleOpen} color="green">Update</Button>
+                        <Button onClick={handleOpen} color="green">View</Button>
                         </div>
                     </td>
                     </tr>
@@ -200,56 +163,77 @@ const ContactList = () => {
             unmount: { scale: 0.9, y: -100 },
         }}
         >
-            <DialogHeader>CateGory Edit</DialogHeader>
+            <DialogHeader>Customer View</DialogHeader>
             <DialogBody className='flex flex-col gap-y-3'>
-                <div>
-                    <div className='flex flex-col gap-y-6'>
-                    <Input size="md" label="Product Name" />
-                    <div className='flex flex-col gap-y-2 mb-12'>
-                        <label htmlFor="description">Description</label>
-                        <ReactQuill theme="snow" value={value} onChange={setValue} className='h-[120px]'/>
-                    </div>
-                    <Input size="md" label="Product Price" type='number'/>
-                    <div className='flex items-start gap-x-3'>
-                        <div class="flex items-center  rounded-[8px] justify-center w-[30%]">
-                        <label for="dropzone-file" class="flex flex-col items-center justify-center text-center w-full h-21 bg-[#E5E7EB] border-2 border-dashed border-gray-400 rounded-[8px] cursor-pointer hover:bg-gray-200">
-                            <div class="flex flex-col items-center justify-center text-body pt-5 pb-6">
-                                <svg class="w-8 h-8 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"/></svg>
-                                <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                            </div>
-                            <input id="dropzone-file" type="file" class="hidden" />
-                        </label>
-                        </div> 
-                        <div className='w-full flex flex-col gap-y-5'>
-                            <div className='w-full flex items-start justify-between'>
-                                <div className='flex flex-col w-[48%] gap-y-5'>
-                                    <Select color="purple" label="Category">
-                                    <Option>Material Tailwind HTML</Option>
-                                    <Option>Material Tailwind React</Option>
-                                    <Option>Material Tailwind Vue</Option>
-                                    <Option>Material Tailwind Angular</Option>
-                                    <Option>Material Tailwind Svelte</Option>
-                                    </Select>
-                                    <Input size="md" label="Product Price" type='number'/>
-                                </div>
-                                <div className='flex flex-col w-[48%] gap-y-5'>
-                                <Select color="purple" label="SubCategory">
-                                    <Option>Material Tailwind HTML</Option>
-                                    <Option>Material Tailwind React</Option>
-                                    <Option>Material Tailwind Vue</Option>
-                                    <Option>Material Tailwind Angular</Option>
-                                    <Option>Material Tailwind Svelte</Option>
-                                    </Select>
-                                    <Input size="md" label="Product Discount" type='number'/>
-                                </div>
-                            </div>
-                            <Input size="md" label="Product Price" type='number'/>
+                <div class="flex justify-center items-center min-h-[50vh]">
+                    <div class="max-w-[720px] mx-auto">
+                        <div class="block mb-4 mx-auto border-b border-slate-300 pb-2 max-w-[360px]">
+                            <a 
+                                target="_blank" 
+                                href="https://www.material-tailwind.com/docs/html/card" 
+                                class="block w-full px-4 py-2 text-center text-slate-700 transition-all"
+                            >
+                                More components on <b>Material Tailwind</b>.
+                            </a>
                         </div>
-                    </div>
-                    <Button variant="filled" color='green' loading={false} className='w-[20%]'>
-                        Upload
-                    </Button>
+
+                        
+                        <div class="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
+                            <div class="relative flex items-center gap-4 pt-0 pb-8 mx-0 mt-4 overflow-hidden text-gray-700 bg-transparent shadow-none rounded-xl bg-clip-border">
+                                <img
+                                    src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1480&amp;q=80"
+                                    alt="Tania Andrew"
+                                    class="relative inline-block h-[58px] w-[58px] rounded-full object-cover object-center" />
+                                <div class="flex w-full flex-col gap-0.5">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+                                            Tania Andrew
+                                        </h5>
+                                        <div class="flex items-center gap-0.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                                class="w-5 h-5 text-yellow-700">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                                class="w-5 h-5 text-yellow-700">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                                class="w-5 h-5 text-yellow-700">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                                class="w-5 h-5 text-yellow-700">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                                class="w-5 h-5 text-yellow-700">
+                                                <path fill-rule="evenodd"
+                                                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <p class="block font-sans text-base antialiased font-light leading-relaxed text-blue-gray-900">
+                                        Frontend Lead @ Google
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="p-0 mb-6">
+                                <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+                                    "I found a solution to all my design needs from Creative Tim. I use them as a freelancer in my
+                                    hobby projects for fun! And it's really affordable, very humble guys!!!"
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </DialogBody>
@@ -260,10 +244,7 @@ const ContactList = () => {
                 onClick={handleOpen}
                 className="mr-1"
                 >
-                <span>Cancel</span>
-                </Button>
-                <Button variant="gradient" color="green" onClick={handleOpen}>
-                <span>Confirm</span>
+                  <span>Cancel</span>
                 </Button>
             </DialogFooter>
         </Dialog>

@@ -26,7 +26,7 @@ const Flashsale = () => {
         </div>
        {/* Flashsale product list section */}
         <div class="relative bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-            <div className='h-[390px] overflow-y-scroll'>
+            <div className='h-[338px] overflow-y-scroll'>
                 <table class="w-full text-sm text-left rtl:text-right text-body ">
                     <thead class="text-sm text-body bg-gray-100 border-b border-default-medium sticky top-0 z-10">
                         <tr>

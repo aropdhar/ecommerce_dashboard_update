@@ -90,7 +90,7 @@ const Banner = () => {
 
        {/* banner table list section */}
       
-        <Card className="h-[320px] w-full overflow-y-scroll">
+        <Card className="h-[275px] w-full overflow-y-scroll">
           <table className="w-full min-w-max table-auto text-center">
             <thead className='sticky top-0 z-10'>
               <tr>

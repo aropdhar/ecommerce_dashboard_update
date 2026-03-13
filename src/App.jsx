@@ -17,20 +17,26 @@ import ProductList from "./pages/productlist/ProductList";
 import Order from "./pages/order/Order";
 import SingleOrder from "./pages/singleorder/SingleOrder";
 import ContactList from "./pages/contactlist/ContactList";
+import SignUp from "./pages/signup/SignUp";
+import SignIn from "./pages/signin/SignIn";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Rootlayout/>}>
-       <Route path="/banner" element={<Banner/>}/>
-       <Route path="/category" element={<Category/>}/>
-       <Route path="/subcategory" element={<Subcategory/>}/>
-       <Route path="/flashsale" element={<Flashsale/>}/>
-       <Route path="/bestselling" element={<BestSelling/>}/>
-       <Route path="/products" element={<Product/>}/>
-       <Route path="/productlist" element={<ProductList/>}/>
-       <Route path="/order" element={<Order/>}/>
-       <Route path="/order/:id" element={<SingleOrder/>}/>
-       <Route path="/contactlist" element={<ContactList/>}/>
+    <Route>
+      <Route path="/" element={<Rootlayout/>}>
+        <Route path="/" element={<Banner/>}/>
+        <Route path="/category" element={<Category/>}/>
+        <Route path="/subcategory" element={<Subcategory/>}/>
+        <Route path="/flashsale" element={<Flashsale/>}/>
+        <Route path="/bestselling" element={<BestSelling/>}/>
+        <Route path="/products" element={<Product/>}/>
+        <Route path="/productlist" element={<ProductList/>}/>
+        <Route path="/order" element={<Order/>}/>
+        <Route path="/order/:id" element={<SingleOrder/>}/>
+        <Route path="/contactlist" element={<ContactList/>}/>
+      </Route>
+      <Route path="/signup" element={<SignUp/>}/>
+      <Route path="/signin" element={<SignIn/>}/>
     </Route>
   )
 );
