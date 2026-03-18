@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import { Button, Input , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter} from '@material-tailwind/react'
-import { useUploadbannerMutation } from '../../../features/api/exclusiveDash';
+import { useUploadbannerMutation , useGetAllBannerQuery} from '../../../features/api/exclusiveDash';
 import { useForm } from "react-hook-form"
+import { SuccessToast } from '../../../utils/Toast';
 
 const Banner = () => {
 
    const [uploadbanner , {isLoading , isError}] = useUploadbannerMutation();
+   const {data:bannerdata , isLoading:bannerloading , isError:bannererror} = useGetAllBannerQuery();
    const { register, handleSubmit, formState: { errors },} = useForm();
 
    const [open, setOpen] = useState(false);
    const handleOpen = () => setOpen(!open);
 
-  const TABLE_HEAD = ["Title", "Banner", "Date", "Actions"];
+  const TABLE_HEAD = ["Name", "Image", "Actions"];
  
   const TABLE_ROWS = [
     {
@@ -67,9 +69,28 @@ const Banner = () => {
     
   ];
 
-   const handlebanner = (data) => {
-    console.log(data.image[0])
+   const handlebanner = async (data) => { 
+      try { 
+
+          const formdata = new FormData();
+          formdata.append("name" , data.name);
+          formdata.append("image" , data.image[0]);
+          const response = await uploadbanner(formdata);
+          
+          if(response?.data?.data){
+            SuccessToast(response?.data?.message);
+          }
+          
+      } catch (error) {
+        console.log("error from handlebanner" , error);
+        
+      }
    }
+   
+   const handledelete = (deleteid) =>{
+      
+   }
+   
 
   return (
     <div>
@@ -95,13 +116,14 @@ const Banner = () => {
                 </label>
             </div> 
 
-            <Button type="submit" variant="outlined" loading={false} className='w-[10%]'>
+            <Button type="submit" variant="outlined" loading={isLoading} className='w-[10%]'>
               Upload
             </Button>
-
+          </div>
+       </form>
           {/* banner table list section */}
           
-            <Card className="h-[275px] w-full overflow-y-scroll">
+            <Card className="h-[275px] w-full overflow-y-scroll mt-5">
               <table className="w-full min-w-max table-auto text-center">
                 <thead className='sticky top-0 z-10'>
                   <tr>
@@ -122,7 +144,7 @@ const Banner = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {TABLE_ROWS.map(({ name, job, date }, index) => {
+                  {bannerdata?.data?.slice().reverse().map(({ name, image , _id}, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50 text-center";
         
@@ -138,26 +160,13 @@ const Banner = () => {
                           </Typography>
                         </td>
                         <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {job}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {date}
-                          </Typography>
+                          <div className='flex items-center justify-center '>
+                             <img src={image} alt={image} className='w-[180px] h-[70px] object-center shadow-2xl'/>
+                          </div>
                         </td>
                         <td className={classes}>
                           <div className='flex items-center gap-x-3 justify-center'>
-                            <Button color="red">Delete</Button>
+                            <Button onClick={()=> handledelete(_id)} color="red">Delete</Button>
                             <Button onClick={handleOpen} color="green">Edit</Button>
                           </div>
                         </td>
@@ -167,8 +176,7 @@ const Banner = () => {
                 </tbody>
               </table>
             </Card>
-          </div>
-       </form>
+        
 
       {/* Edit modal body section  */}
        <Dialog
