@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Input , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter} from '@material-tailwind/react'
-import { useUploadbannerMutation , useGetAllBannerQuery} from '../../../features/api/exclusiveDash';
+import { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation} from '../../../features/api/exclusiveDash';
 import { useForm } from "react-hook-form"
-import { SuccessToast } from '../../../utils/Toast';
+import { ErrorToast, SuccessToast } from '../../../utils/Toast';
 
 const Banner = () => {
 
    const [uploadbanner , {isLoading , isError}] = useUploadbannerMutation();
    const {data:bannerdata , isLoading:bannerloading , isError:bannererror} = useGetAllBannerQuery();
+   const [DeleteBannerItem , { isLoading:loadingbanner , isError:errorbanner}] = useDeleteBannerItemMutation()
    const { register, handleSubmit, formState: { errors },} = useForm();
 
    const [open, setOpen] = useState(false);
@@ -82,13 +83,20 @@ const Banner = () => {
           }
           
       } catch (error) {
-        console.log("error from handlebanner" , error);
-        
+        console.log("error from handlebanner" , error); 
       }
    }
    
-   const handledelete = (deleteid) =>{
-      
+   const handledelete = async (deleteid) =>{
+      try {
+        const response = await DeleteBannerItem(deleteid);
+        if(response?.data?.data){
+          SuccessToast(response?.data?.message)
+        }
+        
+      } catch (error) {
+        ErrorToast("Error from handledelete" , error)
+      }
    }
    
 

@@ -19,10 +19,17 @@ export const dashboardApi = createApi({
       query: () => "/banner", 
       providesTags: ["banner"],
     }),
-    
+    DeleteBannerItem: builder.mutation({
+      query: (deleteId) => ({
+        url: `/deletebanner/${deleteId}`,
+        method: "DELETE",
+      }),
+      // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
+      invalidatesTags: ["banner"],
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation} = dashboardApi
