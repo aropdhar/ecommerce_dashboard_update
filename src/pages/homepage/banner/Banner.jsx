@@ -12,7 +12,22 @@ const Banner = () => {
    const { register, handleSubmit, formState: { errors },} = useForm();
 
    const [open, setOpen] = useState(false);
-   const handleOpen = () => setOpen(!open);
+   const [tempdata , setTempdate] = useState({})
+   const [imageshow , setImageshow] = useState(false)
+
+   const handleOpen = ({ name, image , _id}) => {
+      setOpen(!open);
+      setTempdate({
+        name: name,
+        image: image,
+        _id: _id
+      })
+      setImageshow(false)
+   }
+   
+   
+   
+   
 
   const TABLE_HEAD = ["Name", "Image", "Actions"];
  
@@ -175,7 +190,7 @@ const Banner = () => {
                     <td className={classes}>
                       <div className='flex items-center gap-x-3 justify-center'>
                         <Button onClick={()=> handledelete(_id)} color="red">Delete</Button>
-                        <Button onClick={handleOpen} color="green">Edit</Button>
+                        <Button onClick={()=>handleOpen({ name, image , _id})} color="green">Edit</Button>
                       </div>
                     </td>
                   </tr>
@@ -198,19 +213,24 @@ const Banner = () => {
         <DialogHeader>Banner Edit</DialogHeader>
         <DialogBody className='flex flex-col gap-y-3'>
           <div>
-            <Input size="md" label="Banner Title" />
+            <Input size="md" label="Banner Title" value={tempdata?.name}/>
           </div>
-
-          <div class="flex items-center  rounded-[8px] justify-center w-full">
+           <div className='w-full h-[80%]' onClick={()=>setImageshow(true)}>
+            {!imageshow && 
+               (<img src={tempdata?.image} alt={tempdata?.image} className='w-full h-full object-contain' />)
+            }
+           </div> 
+           {imageshow && (<div class="flex items-center  rounded-[8px] justify-center w-full">
               <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 bg-[#E5E7EB] border-2 border-dashed border-gray-400 rounded-[8px] cursor-pointer hover:bg-gray-200">
                   <div class="flex flex-col items-center justify-center text-body pt-5 pb-6">
                       <svg class="w-8 h-8 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"/></svg>
                       <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                       <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                   </div>
-                  <input id="dropzone-file" type="file" class="hidden" />
+                  <input id="dropzone-file" type="file" class="hidden"  />
               </label>
-          </div> 
+            </div>)}
+          
         </DialogBody>
         <DialogFooter>
           <Button
@@ -225,7 +245,7 @@ const Banner = () => {
             <span>Confirm</span>
           </Button>
         </DialogFooter>
-      </Dialog>
+       </Dialog>
     </div>
   )
 }
