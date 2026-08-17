@@ -27,9 +27,21 @@ export const dashboardApi = createApi({
       // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
       invalidatesTags: ["banner"],
     }),
+     UpdateBanner: builder.mutation({
+      query: ({ name , image , _id }) => ({
+        url: `/bannerupdate/${_id}`,
+        method: "PUT",
+        body: {
+          name: name,
+          image: image
+        }
+      }),
+      // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
+      invalidatesTags: ["banner"],
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation} = dashboardApi

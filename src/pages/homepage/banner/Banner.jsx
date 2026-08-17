@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Input , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter} from '@material-tailwind/react'
-import { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation} from '../../../features/api/exclusiveDash';
+import { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation} from '../../../features/api/exclusiveDash';
 import { useForm } from "react-hook-form"
 import { ErrorToast, SuccessToast } from '../../../utils/Toast';
 
@@ -8,20 +8,22 @@ const Banner = () => {
 
    const [uploadbanner , {isLoading , isError}] = useUploadbannerMutation();
    const {data:bannerdata , isLoading:bannerloading , isError:bannererror} = useGetAllBannerQuery();
-   const [DeleteBannerItem , { isLoading:loadingbanner , isError:errorbanner}] = useDeleteBannerItemMutation()
+   const [DeleteBannerItem , { isLoading:loadingbanner , isError:errorbanner}] = useDeleteBannerItemMutation();
+   const [updateBannerItem , {isLoading:loadingupdate , isError:updateerror}] = useUpdateBannerMutation();
    const { register, handleSubmit, formState: { errors },} = useForm();
 
    const [open, setOpen] = useState(false);
    const [imageshow , setImageshow] = useState(false)
    const [updateinfo , setUpdateInfo] = useState({});
+   
 
    const handleOpen = ({ name, image , _id}) => {
-      setOpen(!open);
       setUpdateInfo({
-        name: name,
-        image: image,
-        _id: _id
+        name,
+        image,
+        _id
       })
+      setOpen(!open);
       setImageshow(false)
    }
    
@@ -113,19 +115,21 @@ const Banner = () => {
    }
 
    const handleUpdate = async () =>{
-    console.log(updateinfo);
-    
+     try {
+        // const response = await updateBannerItem(updateinfo);
+        console.log(updateinfo);
+     } catch (error) {
+       ErrorToast("Error from handledelete" , error);
+     }
    }
 
-
-   console.log(updateinfo);
-   
 
   return (
     <div>
       <h1>Banner</h1>
 
       {/* Banner title & Upload Section */}
+
         <form onSubmit={handleSubmit(handlebanner)}>
             <div className='flex flex-col gap-y-5 mt-3'>
               <div>
@@ -150,6 +154,7 @@ const Banner = () => {
               </Button>
             </div>
         </form>
+
       {/* banner table list section */}
           
         <Card className="h-[275px] w-full overflow-y-scroll mt-5">
@@ -196,7 +201,7 @@ const Banner = () => {
                     <td className={classes}>
                       <div className='flex items-center gap-x-3 justify-center'>
                         <Button onClick={()=> handledelete(_id)} color="red">Delete</Button>
-                        <Button onClick={()=>handleOpen({ name, image , _id})} color="green">Edit</Button>
+                        <Button onClick={()=>handleOpen({ name, image, _id})} color="green">Edit</Button>
                       </div>
                     </td>
                   </tr>
@@ -205,7 +210,6 @@ const Banner = () => {
             </tbody>
           </table>
         </Card>
-        
 
       {/* Edit modal body section  */}
         <Dialog
@@ -220,19 +224,19 @@ const Banner = () => {
           <DialogBody className='flex flex-col gap-y-3'>
             <div>
               <Input size="md" label="Banner Title"  value={updateinfo?.name} onChange={(e)=> setUpdateInfo({...updateinfo , name: e.target.value})} onClick={(e)=> setUpdateInfo({...updateinfo , name: ""})} />
-            </div>
+            </div> 
             <div className='flex items-center'>
-              <div className='w-full h-full' onMouseEnter={()=>setImageshow(true)}>
+              <div className='w-full h-full cursor-pointer' onMouseEnter={()=>setImageshow(true)}>
                 <img src={updateinfo?.image} alt="" className='w-full h-full object-cover'/>
               </div> 
               {imageshow && (<div class="flex items-center  rounded-[8px] justify-center w-full">
-                  <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 bg-[#E5E7EB] border-2 border-dashed border-gray-400 rounded-[8px] cursor-pointer hover:bg-gray-200">
+                  <label for="dropzone-file-edit" class="flex flex-col items-center justify-center w-full h-64 bg-[#E5E7EB] border-2 border-dashed border-gray-400 rounded-[8px] cursor-pointer hover:bg-gray-200">
                       <div class="flex flex-col items-center justify-center text-body pt-5 pb-6">
                           <svg class="w-8 h-8 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"/></svg>
                           <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                           <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                       </div>
-                      <input id="dropzone-file" type="file" class="hidden"  onChange={(e)=>setUpdateInfo({...updateinfo , image: e.target.files[0]})}/>
+                      <input id="dropzone-file-edit" type="file" class="hidden"  onChange={(e)=>setUpdateInfo({...updateinfo , image: e.target.files[0]})}/>
                   </label>
               </div>)}
             </div>
