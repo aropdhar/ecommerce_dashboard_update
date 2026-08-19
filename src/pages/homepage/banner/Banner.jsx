@@ -116,10 +116,21 @@ const Banner = () => {
 
    const handleUpdate = async () =>{
      try {
-        // const response = await updateBannerItem(updateinfo);
-        console.log(updateinfo);
+        
+        const response = await updateBannerItem({
+          image: updateinfo?.image,
+          id: updateinfo?._id
+        });
+        
+        if(response?.data?.data){
+          SuccessToast(response?.data?.message);
+        }
+        
      } catch (error) {
        ErrorToast("Error from handledelete" , error);
+     } finally{
+       setUpdateInfo({});
+       setOpen(!open);
      }
    }
 
@@ -250,7 +261,7 @@ const Banner = () => {
             >
               <span>Cancel</span>
             </Button>
-            <Button variant="gradient" color="green" onClick={handleUpdate}>
+            <Button variant="gradient" color="green" loading={loadingupdate} onClick={handleUpdate}>
               <span>Confirm</span>
             </Button>
           </DialogFooter>

@@ -1,12 +1,19 @@
 import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter} from '@material-tailwind/react'
+import { useForm } from 'react-hook-form';
+import { useGetAllCategoryQuery, useUploadcategoryMutation, useDeleteCategoryItemMutation } from '../../../features/api/exclusiveDash';
+import { SuccessToast } from '../../../utils/Toast';
 
 const Category = () => {
  
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
-  const TABLE_HEAD = ["Title", "Banner", "Date", "Actions"];
- 
+  const TABLE_HEAD = ["Title", "Description", "isActive", "SubCategory" , "Product" ,"Actions"];
+  const { register, handleSubmit, reset, formState: { errors },} = useForm();
+  const [categoryupload , {isLoading , isError}] =  useUploadcategoryMutation();
+  const  {data , isLoading:categoryLoading , isError:categoryError}= useGetAllCategoryQuery();
+  const [deletecategory ,{isLoading:deleteloading , isError: deleteerror}] = useDeleteCategoryItemMutation();
+
   const TABLE_ROWS = [
     {
       name: "John Michael",
@@ -61,17 +68,52 @@ const Category = () => {
     
   ];
 
+  const uploadcategory = async (data) => {
+    try {
+        const response = await categoryupload(data);
+        
+        if(response?.data?.data){
+            SuccessToast(response?.data?.message)
+        }
+        
+    } catch (error) {
+        console.errors("Error from categoryUpload" , error)
+    }finally{
+        reset()
+    }
+  }
+  
+  const handledelete = async(deleteid)=>{
+    try {
+        const response = await deletecategory(deleteid);
+        
+        if(response?.data?.data){
+            SuccessToast(response?.data?.message)
+        }
+        
+        
+    } catch (error) {
+        console.error("Category Delete Not Found")  
+    }
+  }
+
   return (
     <div>
         <div className='flex flex-col gap-y-4'>
-            <div>
-                <Input size="md" label="Name" />
-            </div>
-            <Textarea variant="outlined" label="Description" />
-            <Button variant="filled" color='green' loading={false} className='w-[10%]'>
-                Upload
-            </Button>
-        {/* category table list section */}
+            <form onSubmit={handleSubmit(uploadcategory)}>
+                <div className='flex flex-col gap-y-4'>
+                    <div>
+                        <Input size="md" label="Name" {...register("title", { required: true })}/>
+                        {errors.title && <span className='text-red-500 text-[18px]'>This title is required</span>}
+                    </div>
+                    <Textarea variant="outlined" label="description" {...register("description", { required: true })}/>
+                    {errors.description && <span className='text-red-500 text-[18px]'>This Description is required</span>}
+                    <Button type="submit" variant="filled" color='green' loading={isLoading} className='w-[10%]'>
+                        Upload
+                    </Button>
+                </div>
+            </form>
+            {/* category table list section */}
         
             <Card className="h-[320px] w-full overflow-y-scroll">
                 <table className="w-full min-w-max table-auto text-center">
@@ -94,19 +136,28 @@ const Category = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {TABLE_ROWS.map(({ name, job, date }, index) => {
+                    {data?.data?.slice()?.reverse()?.map((item, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50 text-center";
 
                     return (
-                        <tr key={name}>
+                        <tr key={index}>
                         <td className={classes}>
                             <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                             >
-                            {name}
+                            {item?.title}
+                            </Typography>
+                        </td>
+                        <td className={classes}>
+                            <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal truncate w-52 text-center"
+                            >
+                            {item?.description}
                             </Typography>
                         </td>
                         <td className={classes}>
@@ -115,7 +166,7 @@ const Category = () => {
                             color="blue-gray"
                             className="font-normal"
                             >
-                            {job}
+                            {item.isActive ? "True" : "False"}
                             </Typography>
                         </td>
                         <td className={classes}>
@@ -124,12 +175,21 @@ const Category = () => {
                             color="blue-gray"
                             className="font-normal"
                             >
-                            {date}
+                            {item?.subcategory?.length}
+                            </Typography>
+                        </td>
+                         <td className={classes}>
+                            <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                            >
+                            {item?.product?.length}
                             </Typography>
                         </td>
                         <td className={classes}>
                             <div className='flex items-center gap-x-3 justify-center'>
-                            <Button color="red">Delete</Button>
+                            <Button onClick={()=>handledelete(item._id)} color="red">Delete</Button>
                             <Button onClick={handleOpen} color="green">Update</Button>
                             </div>
                         </td>

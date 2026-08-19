@@ -1,11 +1,12 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { fromJSON } from 'postcss'
 
 // Define a service using a base URL and expected endpoints
 export const dashboardApi = createApi({
   reducerPath: 'dashboardApi',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_API || 'http://localhost:4000/api/v1/' }),
-  tagTypes: ["banner"],
+  tagTypes: ["banner" , "category"],
   endpoints: (builder) => ({
     uploadbanner: builder.mutation({
       query: (bodyobject) => ({
@@ -28,20 +29,42 @@ export const dashboardApi = createApi({
       invalidatesTags: ["banner"],
     }),
      UpdateBanner: builder.mutation({
-      query: ({ name , image , _id }) => ({
-        url: `/bannerupdate/${_id}`,
-        method: "PUT",
-        body: {
-          name: name,
-          image: image
+      query: (data) => {
+        const form = new FormData();
+        form.append("image" , data?.image);
+        
+        return{
+            url: `/bannerupdate/${data.id}`,
+            method: "PUT",
+            body: form,
         }
-      }),
+      },
       // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
       invalidatesTags: ["banner"],
+    }),
+    uploadcategory: builder.mutation({
+      query: (bodyobject) => ({
+        url: `/createcategory`,
+        method: "POST",
+        body: bodyobject
+      }),
+      invalidatesTags: ["category"]
+    }),
+    GetAllCategory: builder.query({
+      query: () => "/allcategory", 
+      providesTags: ["category"]
+    }),
+    DeleteCategoryItem: builder.mutation({
+      query: (deleteId) => ({
+        url: `/deletecategory/${deleteId}`,
+        method: "DELETE",
+      }),
+      // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
+      invalidatesTags: ["category"],
     }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation} = dashboardApi
