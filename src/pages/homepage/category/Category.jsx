@@ -215,8 +215,8 @@ const Category = () => {
                         </td>
                         <td className={classes}>
                             <div className='flex items-center gap-x-3 justify-center'>
-                            <Button onClick={()=>handledelete(item._id)} color="red">Delete</Button>
-                            <Button onClick={()=>handleOpen(item)} color="green">Update</Button>
+                            <Button loading={deleteloading} onClick={()=>handledelete(item._id)} color="red">Delete</Button>
+                            <Button loading={updateloading} onClick={()=>handleOpen(item)} color="green">Update</Button>
                             </div>
                         </td>
                         </tr>
