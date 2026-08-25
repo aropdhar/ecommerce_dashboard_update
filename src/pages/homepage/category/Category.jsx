@@ -227,35 +227,35 @@ const Category = () => {
             </Card>
         </div>
     {/* Edit modal body section  */}
-        <Dialog
-        open={open}
-        handler={handleOpen}
-        animate={{
-            mount: { scale: 1, y: 0 },
-            unmount: { scale: 0.9, y: -100 },
-        }}
-        >
-        <DialogHeader>CateGory Edit</DialogHeader>
-        <DialogBody className='flex flex-col gap-y-3'>
-             <div>
-                <Input size="md" label="Name" onChange={(e)=> setUpdateinfo({...updateinfo , title:e.target.value})}/>
-            </div>
-            <Textarea variant="outlined" label="Description" onChange={(e)=> setUpdateinfo({...updateinfo , description:e.target.value})}/>
-        </DialogBody>
-        <DialogFooter>
-            <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-1"
+            <Dialog
+            open={open}
+            handler={handleOpen}
+            animate={{
+                mount: { scale: 1, y: 0 },
+                unmount: { scale: 0.9, y: -100 },
+            }}
             >
-            <span>Cancel</span>
-            </Button>
-            <Button variant="gradient" color="green" onClick={handleupdate}>
-            <span>Confirm</span>
-            </Button>
-        </DialogFooter>
-        </Dialog>
+            <DialogHeader>CateGory Edit</DialogHeader>
+            <DialogBody className='flex flex-col gap-y-3'>
+                    <div>
+                    <Input size="md" label="Name" onChange={(e)=> setUpdateinfo({...updateinfo , title:e.target.value})}/>
+                </div>
+                <Textarea variant="outlined" label="Description" onChange={(e)=> setUpdateinfo({...updateinfo , description:e.target.value})}/>
+            </DialogBody>
+            <DialogFooter>
+                <Button
+                variant="text"
+                color="red"
+                onClick={handleOpen}
+                className="mr-1"
+                >
+                <span>Cancel</span>
+                </Button>
+                <Button variant="gradient" color="green" onClick={handleupdate}>
+                <span>Confirm</span>
+                </Button>
+            </DialogFooter>
+            </Dialog>
     </div>
   )
 }
