@@ -1,19 +1,28 @@
 import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter} from '@material-tailwind/react'
 import { useForm } from 'react-hook-form';
-import { useGetAllCategoryQuery, useUploadcategoryMutation, useDeleteCategoryItemMutation } from '../../../features/api/exclusiveDash';
+import { useGetAllCategoryQuery, useUploadcategoryMutation, useDeleteCategoryItemMutation , useUpdatecategoryMutation } from '../../../features/api/exclusiveDash';
 import { SuccessToast } from '../../../utils/Toast';
 
 const Category = () => {
  
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
   const TABLE_HEAD = ["Title", "Description", "isActive", "SubCategory" , "Product" ,"Actions"];
   const { register, handleSubmit, reset, formState: { errors },} = useForm();
   const [categoryupload , {isLoading , isError}] =  useUploadcategoryMutation();
   const  {data , isLoading:categoryLoading , isError:categoryError}= useGetAllCategoryQuery();
   const [deletecategory ,{isLoading:deleteloading , isError: deleteerror}] = useDeleteCategoryItemMutation();
+  const [categoryupdate, {isLoading:updateloading , isError:updateerror}] = useUpdatecategoryMutation();
+  const[updateinfo , setUpdateinfo] = useState({});
+  
+  
+  const handleOpen = (updatedata) => {
+    setUpdateinfo({ title: updatedata?.title ,  description: updatedata?.description, id: updatedata?._id})
+    
+    setOpen(!open)
+  };
 
+   
   const TABLE_ROWS = [
     {
       name: "John Michael",
@@ -95,6 +104,23 @@ const Category = () => {
     } catch (error) {
         console.error("Category Delete Not Found")  
     }
+  }
+  
+  
+  const handleupdate = async () =>{
+      try {
+        const response = await categoryupdate(updateinfo);
+
+        if(response?.data?.data){
+            SuccessToast(response?.data?.message)
+        }
+        
+      } catch (error) {
+        console.error("Error From HandleUpdate" , error)
+      } finally{
+        setOpen(!open)
+        reset()
+      }
   }
 
   return (
@@ -190,7 +216,7 @@ const Category = () => {
                         <td className={classes}>
                             <div className='flex items-center gap-x-3 justify-center'>
                             <Button onClick={()=>handledelete(item._id)} color="red">Delete</Button>
-                            <Button onClick={handleOpen} color="green">Update</Button>
+                            <Button onClick={()=>handleOpen(item)} color="green">Update</Button>
                             </div>
                         </td>
                         </tr>
@@ -212,9 +238,9 @@ const Category = () => {
         <DialogHeader>CateGory Edit</DialogHeader>
         <DialogBody className='flex flex-col gap-y-3'>
              <div>
-                <Input size="md" label="Name" />
+                <Input size="md" label="Name" onChange={(e)=> setUpdateinfo({...updateinfo , title:e.target.value})}/>
             </div>
-            <Textarea variant="outlined" label="Description" />
+            <Textarea variant="outlined" label="Description" onChange={(e)=> setUpdateinfo({...updateinfo , description:e.target.value})}/>
         </DialogBody>
         <DialogFooter>
             <Button
@@ -225,7 +251,7 @@ const Category = () => {
             >
             <span>Cancel</span>
             </Button>
-            <Button variant="gradient" color="green" onClick={handleOpen}>
+            <Button variant="gradient" color="green" onClick={handleupdate}>
             <span>Confirm</span>
             </Button>
         </DialogFooter>

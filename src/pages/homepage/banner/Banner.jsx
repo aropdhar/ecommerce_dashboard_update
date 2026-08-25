@@ -10,7 +10,7 @@ const Banner = () => {
    const {data:bannerdata , isLoading:bannerloading , isError:bannererror} = useGetAllBannerQuery();
    const [DeleteBannerItem , { isLoading:loadingbanner , isError:errorbanner}] = useDeleteBannerItemMutation();
    const [updateBannerItem , {isLoading:loadingupdate , isError:updateerror}] = useUpdateBannerMutation();
-   const { register, handleSubmit, formState: { errors },} = useForm();
+   const { register, handleSubmit, reset, formState: { errors },} = useForm();
 
    const [open, setOpen] = useState(false);
    const [imageshow , setImageshow] = useState(false)
@@ -99,6 +99,8 @@ const Banner = () => {
           
       } catch (error) {
         console.log("error from handlebanner" , error); 
+      }finally{
+        reset()
       }
    }
    

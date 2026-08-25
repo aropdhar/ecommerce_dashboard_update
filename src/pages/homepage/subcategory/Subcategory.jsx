@@ -65,6 +65,7 @@ const Subcategory = () => {
             <div>
                 <Input size="md" label="Name" />
             </div>
+            <Textarea variant="outlined" label="description"/>
             <Select color="purple" label="Select Version">
                 <Option>Material Tailwind HTML</Option>
                 <Option>Material Tailwind React</Option>
