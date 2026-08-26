@@ -1,11 +1,20 @@
 import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter , Select, Option} from '@material-tailwind/react'
+import { Controller, useForm } from "react-hook-form"
+import { useDeleteSubCategoryMutation, useGetAllCategoryQuery, useGetAllSubCategoryQuery, useUploadsubcategooryMutation } from '../../../features/api/exclusiveDash';
+import { ErrorToast, SuccessToast } from '../../../utils/Toast';
 
 const Subcategory = () => {
+
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
-    const TABLE_HEAD = ["Title", "Category", "Date", "Actions"];
-     
+    const TABLE_HEAD = ["Title", "Category", "Category Name", "Actions"];
+    const { register, handleSubmit, control, reset, formState: { errors } } = useForm();
+    const {data , isLoading , isError} = useGetAllCategoryQuery();
+    const [uploadsubcategory, {isLoading:loadingsubcategory , isError:errorsubcategory} ] = useUploadsubcategooryMutation();
+    const {data:subcategorydata , isLoading:subcategoryloading} = useGetAllSubCategoryQuery();
+    const [deletesubcategory , {isLoading:subcategoryloadings , isError:deleteerror}] = useDeleteSubCategoryMutation();
+
     const TABLE_ROWS = [
     {
         name: "John Michael",
@@ -59,23 +68,66 @@ const Subcategory = () => {
     },
     
     ];
+    
+    const handleupload = async (data) => {
+            try {
+            const response =  await uploadsubcategory(data);
+            
+            if(response?.error){
+                    ErrorToast(response?.error?.data?.message)
+                }else{
+                    SuccessToast(response?.data?.message)
+            }
+            
+            } catch (error) {
+                console.error("Error from Handle Upload Subcategory" , error)
+            }finally{
+                reset()
+            }
+    }
+
+    const handledelete = async(deleteid) =>{
+       try {
+          const response = await deletesubcategory(deleteid);
+          console.log(response);
+       } catch (error) {
+          console.error("Error From Handle Delete" , error)
+       }
+    }
   return (
    <div>
         <div className='flex flex-col gap-y-4'>
-            <div>
-                <Input size="md" label="Name" />
-            </div>
-            <Textarea variant="outlined" label="description"/>
-            <Select color="purple" label="Select Version">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Button variant="filled" color='green' loading={false} className='w-[10%]'>
-                Create
-            </Button>
+            <form onSubmit={handleSubmit(handleupload)}>
+                <div className='flex flex-col gap-y-4'>
+                    <div>
+                        <Input size="md" label="Name" {...register("title", { required: true })}/>
+                    </div>
+                    <div>
+                       <Textarea variant="outlined" label="description" {...register("description", { required: true })}/>
+                    </div>
+
+
+                    <Controller name="category" control={control} rules={{ required: true }} render={({ field }) => (
+                       <Select color="purple" label="Select Version" value={field.value} onChange={(val) => { field.onChange(val);}}>
+                            {data?.data?.length > 0 ? (
+                                data.data.map((item, index) => (
+                                    <Option key={item._id || index} value={item._id}>
+                                        {item.title}
+                                    </Option>
+                                ))
+                            ) : (
+                                <Option disabled>Loading...</Option>
+                            )}
+                        </Select>
+                       )}
+                    />
+
+
+                    <Button type="submit" variant="filled" color='green' loading={loadingsubcategory} className='w-[10%]'>
+                        Create
+                    </Button>
+                </div>
+            </form>
         {/* banner table list section */}
         
             <Card className="h-[320px] w-full overflow-y-scroll">
@@ -99,19 +151,28 @@ const Subcategory = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {TABLE_ROWS.map(({ name, job, date }, index) => {
+                    {subcategorydata?.data?.slice().reverse().map((item, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50 text-center";
 
                     return (
-                        <tr key={name}>
+                        <tr key={item}>
                         <td className={classes}>
                             <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                             >
-                            {name}
+                            {item?.title}
+                            </Typography>
+                        </td>
+                        <td className={classes}>
+                            <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal w-40 truncate bg-red-500"
+                            >
+                            {item?.description}
                             </Typography>
                         </td>
                         <td className={classes}>
@@ -120,21 +181,12 @@ const Subcategory = () => {
                             color="blue-gray"
                             className="font-normal"
                             >
-                            {job}
-                            </Typography>
-                        </td>
-                        <td className={classes}>
-                            <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                            >
-                            {date}
+                            {item.category[0]?.title}
                             </Typography>
                         </td>
                         <td className={classes}>
                             <div className='flex items-center gap-x-3 justify-center'>
-                            <Button color="red">Delete</Button>
+                            <Button onClick={()=>handledelete(item._id)} color="red">Delete</Button>
                             <Button onClick={handleOpen} color="green">Update</Button>
                             </div>
                         </td>
