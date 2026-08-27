@@ -7,7 +7,18 @@ import { ErrorToast, SuccessToast } from '../../../utils/Toast';
 const Subcategory = () => {
 
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(!open);
+    const [subcategoryupdate , setSubcategoryupdate] = useState();
+
+    const handleOpen = (updateinfo) => {
+        setOpen(!open);
+        setSubcategoryupdate({
+            title: updateinfo?.title,
+            description: updateinfo?.description,
+            category: updateinfo?.category[0]._id
+        })
+        
+    }
+    
     const TABLE_HEAD = ["Title", "Category", "Category Name", "Actions"];
     const { register, handleSubmit, control, reset, formState: { errors } } = useForm();
     const {data , isLoading , isError} = useGetAllCategoryQuery();
@@ -86,14 +97,23 @@ const Subcategory = () => {
             }
     }
 
-    const handledelete = async(deleteid) =>{
+    const handledelete = async(id) =>{     
        try {
-          const response = await deletesubcategory(deleteid);
-          console.log(response);
+          const response = await deletesubcategory(id);
+          
+          if(response?.data?.data){
+            SuccessToast(response?.data?.message)
+          }else{
+            ErrorToast(response?.error?.data?.message)
+          }
+
        } catch (error) {
           console.error("Error From Handle Delete" , error)
        }
     }
+    
+    
+
   return (
    <div>
         <div className='flex flex-col gap-y-4'>
@@ -166,11 +186,11 @@ const Subcategory = () => {
                             {item?.title}
                             </Typography>
                         </td>
-                        <td className={classes}>
+                        <td className={`classes flex items-center justify-center translate-y-full`}>
                             <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal w-40 truncate bg-red-500"
+                            className="font-normal w-40 truncate"
                             >
                             {item?.description}
                             </Typography>
@@ -187,7 +207,7 @@ const Subcategory = () => {
                         <td className={classes}>
                             <div className='flex items-center gap-x-3 justify-center'>
                             <Button onClick={()=>handledelete(item._id)} color="red">Delete</Button>
-                            <Button onClick={handleOpen} color="green">Update</Button>
+                            <Button onClick={()=>handleOpen(item)} color="green">Update</Button>
                             </div>
                         </td>
                         </tr>
@@ -209,14 +229,15 @@ const Subcategory = () => {
         <DialogHeader>CateGory Edit</DialogHeader>
         <DialogBody className='flex flex-col gap-y-3'>
             <div>
-                <Input size="md" label="Name" />
+                <Input size="md" label="Name" value={subcategoryupdate?.title} onClick={()=>setSubcategoryupdate({...subcategoryupdate, title: " "})} onChange={(e)=>setSubcategoryupdate({...subcategoryupdate, title: e.target.value})}/>
             </div>
-            <Select color="purple" label="Select Version">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
+            <div>
+                <Textarea variant="outlined" label="description" value={subcategoryupdate?.description} onClick={()=>setSubcategoryupdate({...subcategoryupdate, description: " "})} onChange={(e)=>setSubcategoryupdate({...subcategoryupdate, description: e.target.value})}/>
+            </div>
+            <Select color="purple" label="Select Version" >
+                {data?.data?.map((item , index)=>(
+                    <Option key={index} onClick={()=>setSubcategoryupdate({...subcategoryupdate, category: item?._id})}>{item.title}</Option>
+                ))}
             </Select>
         </DialogBody>
         <DialogFooter>
@@ -229,7 +250,7 @@ const Subcategory = () => {
             <span>Cancel</span>
             </Button>
             <Button variant="gradient" color="green" onClick={handleOpen}>
-            <span>Confirm</span>
+               <span>Confirm</span>
             </Button>
         </DialogFooter>
         </Dialog>

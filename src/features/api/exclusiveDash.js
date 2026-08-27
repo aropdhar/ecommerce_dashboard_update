@@ -92,9 +92,19 @@ export const dashboardApi = createApi({
       // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
       invalidatesTags: ["subcategory"],
     }),
+    Updatesubcategory: builder.mutation({
+      query: (data) => ({
+        url: `/subcategoryupdate/${data.id}`,
+        method: "PUT",
+        body: data,
+        
+      }),
+      // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
+      invalidatesTags: ["subcategory"],
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation} = dashboardApi

@@ -177,7 +177,7 @@ const Category = () => {
                             {item?.title}
                             </Typography>
                         </td>
-                        <td className={classes}>
+                        <td className={`classes flex items-center justify-center translate-y-full`}>
                             <Typography
                             variant="small"
                             color="blue-gray"
