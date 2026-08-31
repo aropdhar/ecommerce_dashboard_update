@@ -19,6 +19,7 @@ import SingleOrder from "./pages/singleorder/SingleOrder";
 import ContactList from "./pages/contactlist/ContactList";
 import SignUp from "./pages/signup/SignUp";
 import SignIn from "./pages/signin/SignIn";
+import Offer from "./pages/homepage/offer/Offer";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
         <Route path="/" element={<Banner/>}/>
         <Route path="/category" element={<Category/>}/>
         <Route path="/subcategory" element={<Subcategory/>}/>
+        <Route path="/offer" element={<Offer/>}/>
         <Route path="/flashsale" element={<Flashsale/>}/>
         <Route path="/bestselling" element={<BestSelling/>}/>
         <Route path="/products" element={<Product/>}/>

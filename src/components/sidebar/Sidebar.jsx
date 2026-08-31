@@ -89,6 +89,14 @@ const Sidebar = () => {
                         SubCategory
                       </ListItem>
                     </Link>
+                    <Link to={'/offer'}>
+                      <ListItem>
+                        <ListItemPrefix>
+                          <BoltIcon class="h-6 w-6 text-gray-500" />
+                        </ListItemPrefix>
+                        Offer
+                      </ListItem>
+                    </Link>
                     <Link to={'/flashsale'}>
                       <ListItem>
                         <ListItemPrefix>

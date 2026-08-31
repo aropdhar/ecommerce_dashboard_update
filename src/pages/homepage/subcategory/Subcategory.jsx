@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter , Select, Option} from '@material-tailwind/react'
 import { Controller, useForm } from "react-hook-form"
-import { useDeleteSubCategoryMutation, useGetAllCategoryQuery, useGetAllSubCategoryQuery, useUploadsubcategooryMutation } from '../../../features/api/exclusiveDash';
+import { useDeleteSubCategoryMutation, useGetAllCategoryQuery, useGetAllSubCategoryQuery, useUploadsubcategooryMutation, useUpdatesubcategoryMutation } from '../../../features/api/exclusiveDash';
 import { ErrorToast, SuccessToast } from '../../../utils/Toast';
 
 const Subcategory = () => {
@@ -9,9 +9,10 @@ const Subcategory = () => {
     const [open, setOpen] = useState(false);
     const [subcategoryupdate , setSubcategoryupdate] = useState();
 
-    const handleOpen = (updateinfo) => {
+    const handleOpen = (updateinfo) => { 
         setOpen(!open);
-        setSubcategoryupdate({
+        setSubcategoryupdate({ 
+            id: updateinfo?._id,
             title: updateinfo?.title,
             description: updateinfo?.description,
             category: updateinfo?.category[0]._id
@@ -25,6 +26,7 @@ const Subcategory = () => {
     const [uploadsubcategory, {isLoading:loadingsubcategory , isError:errorsubcategory} ] = useUploadsubcategooryMutation();
     const {data:subcategorydata , isLoading:subcategoryloading} = useGetAllSubCategoryQuery();
     const [deletesubcategory , {isLoading:subcategoryloadings , isError:deleteerror}] = useDeleteSubCategoryMutation();
+    const [updatesubcategory, {isLoading:updatesubcategoryloadings , isError:updatesubcategoryerror}] = useUpdatesubcategoryMutation();
 
     const TABLE_ROWS = [
     {
@@ -113,6 +115,24 @@ const Subcategory = () => {
     }
     
     
+    const handleupdate = async()=>{
+        setOpen(!open)
+        try {
+            const response = await updatesubcategory(subcategoryupdate);
+            
+            if(response?.data?.data){
+                SuccessToast(response?.data?.message)
+            }else{
+                ErrorToast(response?.error?.data?.message);
+            }
+            
+        } catch (error) {
+            console.error("Error From Handle Update", error);
+            
+        }finally{
+            reset()
+        }
+    }
 
   return (
    <div>
@@ -121,9 +141,11 @@ const Subcategory = () => {
                 <div className='flex flex-col gap-y-4'>
                     <div>
                         <Input size="md" label="Name" {...register("title", { required: true })}/>
+                         {errors.title && <span className='text-red-500 text-[16px]'>This title field is required</span>}
                     </div>
                     <div>
                        <Textarea variant="outlined" label="description" {...register("description", { required: true })}/>
+                        {errors.description && <span className='text-red-500 text-[16px]'>This description field is required</span>}
                     </div>
 
 
@@ -144,11 +166,11 @@ const Subcategory = () => {
 
 
                     <Button type="submit" variant="filled" color='green' loading={loadingsubcategory} className='w-[10%]'>
-                        Create
+                        Upload
                     </Button>
                 </div>
             </form>
-        {/* banner table list section */}
+    {/* sub category table list section */}
         
             <Card className="h-[320px] w-full overflow-y-scroll">
                 <table className="w-full min-w-max table-auto text-center">
@@ -206,7 +228,7 @@ const Subcategory = () => {
                         </td>
                         <td className={classes}>
                             <div className='flex items-center gap-x-3 justify-center'>
-                            <Button onClick={()=>handledelete(item._id)} color="red">Delete</Button>
+                            <Button loading={subcategoryloadings} onClick={()=>handledelete(item._id)} color="red">Delete</Button>
                             <Button onClick={()=>handleOpen(item)} color="green">Update</Button>
                             </div>
                         </td>
@@ -218,42 +240,42 @@ const Subcategory = () => {
             </Card>
         </div>
     {/* Edit modal body section  */}
-        <Dialog
-        open={open}
-        handler={handleOpen}
-        animate={{
-            mount: { scale: 1, y: 0 },
-            unmount: { scale: 0.9, y: -100 },
-        }}
-        >
-        <DialogHeader>CateGory Edit</DialogHeader>
-        <DialogBody className='flex flex-col gap-y-3'>
-            <div>
-                <Input size="md" label="Name" value={subcategoryupdate?.title} onClick={()=>setSubcategoryupdate({...subcategoryupdate, title: " "})} onChange={(e)=>setSubcategoryupdate({...subcategoryupdate, title: e.target.value})}/>
-            </div>
-            <div>
-                <Textarea variant="outlined" label="description" value={subcategoryupdate?.description} onClick={()=>setSubcategoryupdate({...subcategoryupdate, description: " "})} onChange={(e)=>setSubcategoryupdate({...subcategoryupdate, description: e.target.value})}/>
-            </div>
-            <Select color="purple" label="Select Version" >
-                {data?.data?.map((item , index)=>(
-                    <Option key={index} onClick={()=>setSubcategoryupdate({...subcategoryupdate, category: item?._id})}>{item.title}</Option>
-                ))}
-            </Select>
-        </DialogBody>
-        <DialogFooter>
-            <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-1"
+            <Dialog
+            open={open}
+            handler={handleOpen}
+            animate={{
+                mount: { scale: 1, y: 0 },
+                unmount: { scale: 0.9, y: -100 },
+            }}
             >
-            <span>Cancel</span>
-            </Button>
-            <Button variant="gradient" color="green" onClick={handleOpen}>
-               <span>Confirm</span>
-            </Button>
-        </DialogFooter>
-        </Dialog>
+            <DialogHeader>CateGory Edit</DialogHeader>
+            <DialogBody className='flex flex-col gap-y-3'>
+                <div>
+                    <Input size="md" label="Name" value={subcategoryupdate?.title} onClick={()=>setSubcategoryupdate({...subcategoryupdate, title: " "})} onChange={(e)=>setSubcategoryupdate({...subcategoryupdate, title: e.target.value})}/>
+                </div>
+                <div>
+                    <Textarea variant="outlined" label="description" value={subcategoryupdate?.description} onClick={()=>setSubcategoryupdate({...subcategoryupdate, description: " "})} onChange={(e)=>setSubcategoryupdate({...subcategoryupdate, description: e.target.value})}/>
+                </div>
+                <Select color="purple" label="Select Version" >
+                    {data?.data?.map((item , index)=>(
+                        <Option key={index} onClick={()=>setSubcategoryupdate({...subcategoryupdate, category: item?._id})}>{item.title}</Option>
+                    ))}
+                </Select>
+            </DialogBody>
+            <DialogFooter>
+                <Button
+                variant="text"
+                color="red"
+                onClick={handleOpen}
+                className="mr-1"
+                >
+                <span>Cancel</span>
+                </Button>
+                <Button loading={updatesubcategoryloadings} variant="gradient" color="green" onClick={handleupdate}>
+                    <span>Confirm</span>
+                </Button>
+            </DialogFooter>
+            </Dialog>
     </div>
   )
 }
