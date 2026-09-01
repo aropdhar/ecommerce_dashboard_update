@@ -74,7 +74,7 @@ const Offer = () => {
             
         }
     }
-    
+
   return (
     <>  
         {/* offer Input section */}
@@ -111,7 +111,7 @@ const Offer = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {alloffer?.data?.map((item , index)=>(
+                        {alloffer?.data?.slice().reverse().map((item , index)=>(
                             <tr key={index} class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
                                 <th scope="row" class="px-6 py-4 font-medium text-heading whitespace-nowrap">
                                     {item.offerdateName}
