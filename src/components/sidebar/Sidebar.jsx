@@ -28,6 +28,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
+import { IoGiftOutline } from 'react-icons/io5';
 
 const Sidebar = () => {
      const [open, setOpen] = React.useState(0);
@@ -92,7 +93,7 @@ const Sidebar = () => {
                     <Link to={'/offer'}>
                       <ListItem>
                         <ListItemPrefix>
-                          <BoltIcon class="h-6 w-6 text-gray-500" />
+                          <IoGiftOutline  class="h-6 w-6 text-gray-500" />
                         </ListItemPrefix>
                         Offer
                       </ListItem>

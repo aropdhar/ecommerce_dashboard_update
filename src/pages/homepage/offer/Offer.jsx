@@ -1,15 +1,32 @@
-import React from 'react'
-import { Button, Select, Option, Input } from '@material-tailwind/react'
+import React, { useState } from 'react'
+import { Button, Input, Dialog, DialogHeader, DialogBody, DialogFooter, } from '@material-tailwind/react'
 import { useForm } from "react-hook-form"
-import { useGetAllofferQuery, useUploadofferMutation } from '../../../features/api/exclusiveDash'
+import { useDeleteofferMutation, useGetAllofferQuery, useUpdateofferMutation, useUploadofferMutation } from '../../../features/api/exclusiveDash'
 import { ErrorToast, SuccessToast } from '../../../utils/Toast'
+
 
 const Offer = () => {
     const [uploadoffer , {isLoading , isError}] = useUploadofferMutation();
     const {data:alloffer , isLoading:offerloading} = useGetAllofferQuery();
+    const [deleteoffer, {isLoading:deleteloading}]= useDeleteofferMutation();
+    const [offerupdated ,{isLoading:updateloading}] = useUpdateofferMutation();
     const { register, handleSubmit, reset, formState: { errors },} = useForm();
+    const [updateoffer , setupdateoffer] = useState()
+    const [open, setOpen] = React.useState(false);
+  
+    const handleOpen = (updatedata) => {
+        setOpen(!open);
+        setupdateoffer({
+            id: updatedata?._id,
+            offerdateName: updatedata?.offerdateName,
+            offerDate: updatedata?.offerDate
+        })
+        
+    }
     
     
+    
+
     const handleoffer =async (data) => {
         try {
             const response = await uploadoffer(data);
@@ -26,6 +43,35 @@ const Offer = () => {
             
         }finally{
             reset()
+        }
+    }
+    
+    const handledelete = async(itemId) =>{
+        try {
+            const response = await deleteoffer(itemId);
+
+            if(response?.data?.data){
+                SuccessToast(response?.data?.message)
+            }
+            
+        } catch (error) {
+            console.error("Error From Handle Deleted", error);
+            
+        }
+        
+    }
+    
+    const handleupdate = async() =>{
+        setOpen(!open)
+        try {
+            const response = await offerupdated(updateoffer);
+            
+            if(response?.data?.data){
+                SuccessToast(response?.data?.message)
+            }
+        } catch (error) {
+            console.error("Error From Handle Update", error);
+            
         }
     }
     
@@ -47,7 +93,7 @@ const Offer = () => {
                 </Button>
             </div>
         </form>
-        {/* Flashsale product list section */}
+        {/* offer list section */}
         <div class="relative bg-neutral-primary-soft shadow-xs rounded-base border border-default">
             <div className='h-[338px] overflow-y-scroll'>
                 <table class="w-full text-sm text-left rtl:text-right text-body ">
@@ -74,8 +120,8 @@ const Offer = () => {
                                     {item.offerDate}
                                 </td>
                                 <td class="px-6 py-4 flex items-center justify-center gap-x-2">
-                                    <Button color="red">Delete</Button>
-                                    <Button color="green">Update</Button>
+                                    <Button loading={deleteloading} onClick={()=>handledelete(item._id)} color="red">Delete</Button>
+                                    <Button onClick={()=>handleOpen(item)} color="green">Update</Button>
                                 </td>
                             </tr>
                         ))}
@@ -83,6 +129,34 @@ const Offer = () => {
                 </table>
             </div>
         </div>
+
+        {/* offer update section */}
+        <Dialog open={open} handler={handleOpen}>
+            <DialogHeader>Offer Update</DialogHeader>
+            <DialogBody>
+                <div className='flex flex-col gap-y-4'>
+                    <div>
+                      <Input label="Offer Name" type='text' value={updateoffer?.offerdateName} onClick={()=>setupdateoffer({...updateoffer, offerdateName: " "})} onChange={(e)=>setupdateoffer({...updateoffer, offerdateName: e.target.value})}/>
+                    </div>
+                    <div>
+                       <Input label="Offer Date" type='number' value={updateoffer?.offerDate} onClick={()=>setupdateoffer({...updateoffer, offerDate: " "})} onChange={(e)=>setupdateoffer({...updateoffer, offerDate: e.target.value})}/>
+                    </div>
+                </div>
+            </DialogBody>
+            <DialogFooter>
+            <Button
+                variant="text"
+                color="red"
+                onClick={handleOpen}
+                className="mr-1"
+            >
+                <span>Cancel</span>
+            </Button>
+            <Button variant="gradient" color="green" onClick={handleupdate}>
+                <span>Confirm</span>
+            </Button>
+            </DialogFooter>
+        </Dialog>
     </>
   )
 }

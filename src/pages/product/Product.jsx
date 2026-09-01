@@ -37,7 +37,7 @@ const Product = () => {
                         <Option>Material Tailwind Angular</Option>
                         <Option>Material Tailwind Svelte</Option>
                       </Select>
-                      <Input size="md" label="Product Price" type='number'/>
+                      <Input size="md" label="Product Discount" type='number'/>
                   </div>
                   <div className='flex flex-col w-[45%] gap-y-3'>
                     <Select color="purple" label="SubCategory">
@@ -47,10 +47,10 @@ const Product = () => {
                         <Option>Material Tailwind Angular</Option>
                         <Option>Material Tailwind Svelte</Option>
                       </Select>
-                      <Input size="md" label="Product Discount" type='number'/>
+                      <Input size="md" label="Product Rating 0 ~ 5" type='number'/>
                   </div>
               </div>
-              <Input size="md" label="Product Price" type='number'/>
+              <Input size="md" label="Product Reviews" type='number'/>
            </div>
         </div>
         <Button variant="filled" color='green' loading={false} className='w-[10%]'>
