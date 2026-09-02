@@ -6,7 +6,7 @@ import { fromJSON } from 'postcss'
 export const dashboardApi = createApi({
   reducerPath: 'dashboardApi',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_API || 'http://localhost:4000/api/v1/' }),
-  tagTypes: ["banner", "category", "subcategory", "offer"],
+  tagTypes: ["banner", "category", "subcategory", "offer", "product"],
   endpoints: (builder) => ({
     uploadbanner: builder.mutation({
       query: (bodyobject) => ({
@@ -131,9 +131,17 @@ export const dashboardApi = createApi({
       // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
       invalidatesTags: ["offer"],
     }),
+    uploadproduct: builder.mutation({
+      query: (bodyobject) => ({
+        url: `/product`,
+        method: "POST",
+        body: bodyobject
+      }),
+      invalidatesTags: ["product"]
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation , useUploadproductMutation} = dashboardApi
