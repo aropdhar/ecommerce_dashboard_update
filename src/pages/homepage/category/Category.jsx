@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter} from '@material-tailwind/react'
 import { useForm } from 'react-hook-form';
 import { useGetAllCategoryQuery, useUploadcategoryMutation, useDeleteCategoryItemMutation , useUpdatecategoryMutation } from '../../../features/api/exclusiveDash';
-import { SuccessToast } from '../../../utils/Toast';
+import { ErrorToast, SuccessToast } from '../../../utils/Toast';
 
 const Category = () => {
  
@@ -81,7 +81,9 @@ const Category = () => {
     try {
         const response = await categoryupload(data);
         
-        if(response?.data?.data){
+        if(!response?.data?.data){
+            ErrorToast(response?.error?.data?.message)
+        }else{
             SuccessToast(response?.data?.message)
         }
         
@@ -96,9 +98,12 @@ const Category = () => {
     try {
         const response = await deletecategory(deleteid);
         
-        if(response?.data?.data){
+        if(!response?.data?.data){
+            ErrorToast(response?.error?.data?.message)
+        }else{
             SuccessToast(response?.data?.message)
         }
+        
         
         
     } catch (error) {
