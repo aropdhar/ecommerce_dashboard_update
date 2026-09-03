@@ -148,7 +148,7 @@ const Product = () => {
                 </div>
             </div>
           </div>
-          <Button type="submit" variant="filled" color='green' loading={false} className='w-[10%]'>
+          <Button type="submit" variant="filled" color='green' loading={isLoading} className='w-[10%]'>
               Upload
           </Button>
         </div>
