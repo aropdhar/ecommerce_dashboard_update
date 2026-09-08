@@ -139,9 +139,13 @@ export const dashboardApi = createApi({
       }),
       invalidatesTags: ["product"]
     }),
+    GetAllProduct: builder.query({
+      query: () => "/product", 
+      providesTags: ["product"]
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation , useUploadproductMutation} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation , useUploadproductMutation , useGetAllProductQuery} = dashboardApi

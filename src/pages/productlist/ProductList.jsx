@@ -2,6 +2,11 @@ import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter , Select, Option} from '@material-tailwind/react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useGetAllProductQuery } from '../../features/api/exclusiveDash';
+import ProductSkeleton from '../../productskeleton/ProductSkeleton';
+import Producterror from '../../producterror/Producterror';
+import axios from "axios";
+import { ErrorToast, SuccessToast } from '../../utils/Toast';
 
 const ProductList = () => {
 
@@ -9,7 +14,7 @@ const ProductList = () => {
     const [value, setValue] = useState('');
     const handleOpen = () => setOpen(!open);
     const TABLE_HEAD = ["Name", "Description", "Price", "Image" , "Category" , "Subcategory" , "Actions"];
-     
+    const {data , isLoading , isError} = useGetAllProductQuery(); 
     const TABLE_ROWS = [
         {
             name: "Wireless Headphone",
@@ -93,6 +98,44 @@ const ProductList = () => {
         },
     ];
 
+    const retryfunction = () =>{
+        window.location.reload()
+    }
+    
+    if(isLoading){
+        return <ProductSkeleton/>
+    }
+    
+    if(isError){
+        return <Producterror retryfunction={retryfunction}/>
+    }
+
+    const handlebestselling = async (id) =>{
+        try {
+
+            const response = await axios.post(`${import.meta.env.VITE_BASE_API}/bestsellingproduct`,{
+                "product": id
+            },{
+            headers: {
+                    "Content-Type": "application/json",
+            }, 
+            })
+            
+            if(response?.data?.data){
+                ErrorToast(response?.error?.data?.message);
+            }else{
+                SuccessToast(response?.data?.message)
+            }
+
+            console.log(response);
+            
+            
+
+        } catch (error) {
+            console.error("Error Handle Best Selling", error);
+        }
+    }
+    
   return (
     <>
       {/* productlist table list section */}
@@ -118,19 +161,28 @@ const ProductList = () => {
                 </tr>
             </thead>
             <tbody>
-                {TABLE_ROWS.map(({ name , description , price , image , category , subcategory }, index) => {
+                {data?.data?.slice().reverse().map((item , index) => {
                 const isLast = index === TABLE_ROWS.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50 text-center";
 
                 return (
-                    <tr key={name}>
+                    <tr key={index}>
                     <td className={classes}>
                         <Typography
                         variant="small"
                         color="blue-gray"
                         className="font-normal"
                         >
-                        {name}
+                        {item?.name}
+                        </Typography>
+                    </td>
+                    <td className={classes}>
+                        <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal w-40 truncate"
+                        >
+                        {item?.description}
                         </Typography>
                     </td>
                     <td className={classes}>
@@ -139,7 +191,16 @@ const ProductList = () => {
                         color="blue-gray"
                         className="font-normal"
                         >
-                        {description}
+                        {item?.price}
+                        </Typography>
+                    </td>
+                    <td className={`${classes} w-10 h-10 overflow-hidden`}>
+                        <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                        >
+                          <img src={item?.image[0]} alt="Missing" className='w-full h-full object-cover'/>
                         </Typography>
                     </td>
                     <td className={classes}>
@@ -148,7 +209,7 @@ const ProductList = () => {
                         color="blue-gray"
                         className="font-normal"
                         >
-                        {price}
+                        {item?.category?.title}
                         </Typography>
                     </td>
                     <td className={classes}>
@@ -157,30 +218,13 @@ const ProductList = () => {
                         color="blue-gray"
                         className="font-normal"
                         >
-                          <img src={image} alt="Missing" />
-                        </Typography>
-                    </td>
-                    <td className={classes}>
-                        <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        >
-                        {category}
-                        </Typography>
-                    </td>
-                    <td className={classes}>
-                        <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                        >
-                        {subcategory}
+                        {item?.subcategory?.title}
                         </Typography>
                     </td>
                     <td className={classes}>
                         <div className='flex items-center gap-x-3 justify-center'>
-                        <Button color="red">Delete</Button>
+                        <Button  color="red">Delete</Button>
+                        <Button onClick={()=>handlebestselling(item?._id)} color="blue">Bestselling</Button>
                         <Button onClick={handleOpen} color="green">Update</Button>
                         </div>
                     </td>

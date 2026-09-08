@@ -4,37 +4,12 @@ import { Button, Select, Option } from '@material-tailwind/react'
 const BestSelling = () => {
   return (
     <>  
-       {/* BestSelling select section */}
-        <div className='flex flex-col gap-y-5 mb-8'>
-            <Select color="purple" label="Category">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Select color="purple" label="SubCategory">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Button variant="filled" color='green' loading={false} className='w-[10%]'>
-                Search
-            </Button>
-        </div>
        {/* BestSelling product list section */}
         <div class="relative bg-neutral-primary-soft shadow-xs rounded-base border border-default">
             <div className='h-[338px] overflow-y-scroll'>
                 <table class="w-full text-sm text-left rtl:text-right text-body ">
                     <thead class="text-sm text-body bg-gray-100 border-b border-default-medium sticky top-0 z-10">
                         <tr>
-                            <th scope="col" class="p-4">
-                                <div class="flex items-center">
-                                    <label for="table-checkbox-27" class="sr-only">Table checkbox</label>
-                                </div>
-                            </th>
                             <th scope="col" class="px-6 py-3">
                                 Product name
                             </th>
@@ -55,12 +30,6 @@ const BestSelling = () => {
                     <tbody>
                         {[...new Array(10)].map((_ , index)=>(
                             <tr class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
-                                <td class="w-4 p-4">
-                                    <div class="flex items-center">
-                                        <input id="table-checkbox-28" type="checkbox" value="" class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft"/>
-                                        <label for="table-checkbox-28" class="sr-only">Table checkbox</label>
-                                    </div>
-                                </td>
                                 <th scope="row" class="px-6 py-4 font-medium text-heading whitespace-nowrap">
                                     Apple MacBook Pro 17"
                                 </th>
