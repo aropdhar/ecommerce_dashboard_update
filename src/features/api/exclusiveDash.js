@@ -143,9 +143,17 @@ export const dashboardApi = createApi({
       query: () => "/product", 
       providesTags: ["product"]
     }),
+    DeleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/deletedproduct/${id}`,
+        method: "DELETE",
+      }),
+      // Invalidate the 'Cart' tag to trigger re-fetching of GetAllCart query
+      invalidatesTags: ["product"],
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation , useUploadproductMutation , useGetAllProductQuery} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation , useUploadproductMutation , useGetAllProductQuery , useDeleteProductMutation} = dashboardApi

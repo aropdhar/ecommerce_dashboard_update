@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter , Select, Option} from '@material-tailwind/react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useGetAllProductQuery } from '../../features/api/exclusiveDash';
+import { useDeleteProductMutation, useGetAllProductQuery } from '../../features/api/exclusiveDash';
 import ProductSkeleton from '../../productskeleton/ProductSkeleton';
 import Producterror from '../../producterror/Producterror';
 import axios from "axios";
@@ -15,6 +15,7 @@ const ProductList = () => {
     const handleOpen = () => setOpen(!open);
     const TABLE_HEAD = ["Name", "Description", "Price", "Image" , "Category" , "Subcategory" , "Actions"];
     const {data , isLoading , isError} = useGetAllProductQuery(); 
+    const [deleteproduct , {isLoading:deleteloading , isError:producterror}] = useDeleteProductMutation();
     const TABLE_ROWS = [
         {
             name: "Wireless Headphone",
@@ -97,7 +98,7 @@ const ProductList = () => {
             subcategory: "Daily Use",
         },
     ];
-
+    
     const retryfunction = () =>{
         window.location.reload()
     }
@@ -110,24 +111,24 @@ const ProductList = () => {
         return <Producterror retryfunction={retryfunction}/>
     }
 
-    const handlebestselling = async (id) =>{
+    const handlebestselling = async (bestid) =>{
         try {
 
             const response = await axios.post(`${import.meta.env.VITE_BASE_API}/bestsellingproduct`,{
-                "product": id
+                "product": bestid
             },{
             headers: {
                     "Content-Type": "application/json",
             }, 
             })
             
-            if(response?.data?.data){
+            if(!response?.data?.data){
                 ErrorToast(response?.error?.data?.message);
             }else{
                 SuccessToast(response?.data?.message)
             }
 
-            console.log(response);
+            
             
             
 
@@ -136,6 +137,21 @@ const ProductList = () => {
         }
     }
     
+    const handledelete = async (id) =>{
+        try {          
+            const response = await deleteproduct(id);
+            
+            if(!response?.data?.data){
+                ErrorToast(response?.error?.data?.message)
+            }else{
+                SuccessToast(response?.data?.message)
+            }
+            
+        } catch (error) {
+            console.error("Error From Handle Delete", error);
+        }
+    }
+
   return (
     <>
       {/* productlist table list section */}
@@ -223,7 +239,7 @@ const ProductList = () => {
                     </td>
                     <td className={classes}>
                         <div className='flex items-center gap-x-3 justify-center'>
-                        <Button  color="red">Delete</Button>
+                        <Button onClick={()=> handledelete(item?._id)} color="red">Delete</Button>
                         <Button onClick={()=>handlebestselling(item?._id)} color="blue">Bestselling</Button>
                         <Button onClick={handleOpen} color="green">Update</Button>
                         </div>
