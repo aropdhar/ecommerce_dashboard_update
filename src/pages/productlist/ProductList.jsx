@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Input, Textarea , Card, Typography, Dialog, DialogHeader, DialogBody, DialogFooter , Select, Option} from '@material-tailwind/react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useDeleteProductMutation, useGetAllProductQuery } from '../../features/api/exclusiveDash';
+import { useDeleteProductMutation, useGetAllCategoryQuery, useGetAllProductQuery, useGetAllSubCategoryQuery, useUpdateproductMutation } from '../../features/api/exclusiveDash';
 import ProductSkeleton from '../../productskeleton/ProductSkeleton';
 import Producterror from '../../producterror/Producterror';
 import axios from "axios";
@@ -12,10 +12,39 @@ const ProductList = () => {
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState('');
-    const handleOpen = () => setOpen(!open);
+    const [productlistupdate , setProduclistupdate] = useState();
+    const handleOpen = (updatedata) => {
+        setOpen(!open);
+        setProduclistupdate({
+            id: updatedata?._id,
+            name: updatedata?.name,
+            description: updatedata?.description,
+            price: updatedata?.price,
+            image: updatedata?.image[0],
+            category: updatedata?.category?._id,
+            subcategory: updatedata?.subcategory?._id,
+            discountPrice: updatedata?.discountPrice,
+            review: updatedata?.review[0],
+            rating: updatedata?.rating
+        })
+    }
+    
     const TABLE_HEAD = ["Name", "Description", "Price", "Image" , "Category" , "Subcategory" , "Actions"];
     const {data , isLoading , isError} = useGetAllProductQuery(); 
     const [deleteproduct , {isLoading:deleteloading , isError:producterror}] = useDeleteProductMutation();
+    const {data:categorydata , isLoading:categoryloading} = useGetAllCategoryQuery();
+    const {data:subcategorydata , isLoading:subcategoryloading} = useGetAllSubCategoryQuery();
+    const [updateproduct , {isLoading:updateloading , isError:updateerror}] = useUpdateproductMutation();
+   
+    // reactqull description section
+    const [descriptionTouched, setDescriptionTouched] = useState(false);
+
+    const handleDescriptionFocus = () => {
+        if (!descriptionTouched) {
+            setProduclistupdate({ ...productlistupdate, description: "" });
+            setDescriptionTouched(true);
+        }
+    };
     const TABLE_ROWS = [
         {
             name: "Wireless Headphone",
@@ -126,11 +155,7 @@ const ProductList = () => {
                 ErrorToast(response?.error?.data?.message);
             }else{
                 SuccessToast(response?.data?.message)
-            }
-
-            
-            
-            
+            }    
 
         } catch (error) {
             console.error("Error Handle Best Selling", error);
@@ -151,7 +176,24 @@ const ProductList = () => {
             console.error("Error From Handle Delete", error);
         }
     }
-
+    
+    const handleupdate = async () =>{
+        setOpen(!open)
+        try {
+            const response = await updateproduct(productlistupdate);
+            
+            if(!response?.data?.data){
+                ErrorToast(response?.error?.data?.message)
+            }else{
+                SuccessToast(response?.data?.message)
+            }
+            
+            
+        } catch (error) {
+            console.error("Error From Handle Upload", error);
+            
+        }
+    }
   return (
     <>
       {/* productlist table list section */}
@@ -239,9 +281,9 @@ const ProductList = () => {
                     </td>
                     <td className={classes}>
                         <div className='flex items-center gap-x-3 justify-center'>
-                        <Button onClick={()=> handledelete(item?._id)} color="red">Delete</Button>
+                        <Button loading={deleteloading} onClick={()=> handledelete(item?._id)} color="red">Delete</Button>
                         <Button onClick={()=>handlebestselling(item?._id)} color="blue">Bestselling</Button>
-                        <Button onClick={handleOpen} color="green">Update</Button>
+                        <Button onClick={()=>handleOpen(item)} color="green">Update</Button>
                         </div>
                     </td>
                     </tr>
@@ -260,16 +302,16 @@ const ProductList = () => {
             unmount: { scale: 0.9, y: -100 },
         }}
         >
-            <DialogHeader>CateGory Edit</DialogHeader>
+            <DialogHeader>Product Edit</DialogHeader>
             <DialogBody className='flex flex-col gap-y-3'>
                 <div>
                     <div className='flex flex-col gap-y-6'>
-                    <Input size="md" label="Product Name" />
+                    <Input size="md" label="Product Name" value={productlistupdate?.name} onClick={()=>setProduclistupdate({...productlistupdate, name: " "})} onChange={(e)=>setProduclistupdate({...productlistupdate, name: e.target.value})}/>
                     <div className='flex flex-col gap-y-2 mb-12'>
                         <label htmlFor="description">Description</label>
-                        <ReactQuill theme="snow" value={value} onChange={setValue} className='h-[120px]'/>
+                        <ReactQuill theme="snow" value={productlistupdate?.description} onFocus={handleDescriptionFocus} onChange={(content)=>setProduclistupdate({...productlistupdate, description: content})} className='h-[120px]'/>
                     </div>
-                    <Input size="md" label="Product Price" type='number'/>
+                    <Input size="md" label="Product Price" type='number' value={productlistupdate?.price} onClick={()=>setProduclistupdate({...productlistupdate, price: " "})} onChange={(e)=>setProduclistupdate({...productlistupdate, price: e.target.value})}/>
                     <div className='flex items-start gap-x-3'>
                         <div class="flex items-center  rounded-[8px] justify-center w-[30%]">
                         <label for="dropzone-file" class="flex flex-col items-center justify-center text-center w-full h-21 bg-[#E5E7EB] border-2 border-dashed border-gray-400 rounded-[8px] cursor-pointer hover:bg-gray-200">
@@ -278,36 +320,32 @@ const ProductList = () => {
                                 <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                 <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                             </div>
-                            <input id="dropzone-file" type="file" class="hidden" />
+                            <input id="dropzone-file" type="file" class="hidden" onChange={(e)=>setProduclistupdate({...productlistupdate, image: e.target.files[0]})}/>
                         </label>
                         </div> 
                         <div className='w-full flex flex-col gap-y-5'>
                             <div className='w-full flex items-start justify-between'>
                                 <div className='flex flex-col w-[48%] gap-y-5'>
                                     <Select color="purple" label="Category">
-                                    <Option>Material Tailwind HTML</Option>
-                                    <Option>Material Tailwind React</Option>
-                                    <Option>Material Tailwind Vue</Option>
-                                    <Option>Material Tailwind Angular</Option>
-                                    <Option>Material Tailwind Svelte</Option>
+                                        {categorydata?.data?.map((item , index)=>(
+                                            <Option onClick={()=>setProduclistupdate({...productlistupdate, category: item._id})}>{item.title}</Option>
+                                        ))}
                                     </Select>
-                                    <Input size="md" label="Product Price" type='number'/>
+                                    <Input size="md" label="Product Discount" type='number' value={productlistupdate?.discountPrice} onClick={()=>setProduclistupdate({...productlistupdate, discountPrice: " "})} onChange={(e)=>setProduclistupdate({...productlistupdate, discountPrice: e.target.value})}/>
                                 </div>
                                 <div className='flex flex-col w-[48%] gap-y-5'>
-                                <Select color="purple" label="SubCategory">
-                                    <Option>Material Tailwind HTML</Option>
-                                    <Option>Material Tailwind React</Option>
-                                    <Option>Material Tailwind Vue</Option>
-                                    <Option>Material Tailwind Angular</Option>
-                                    <Option>Material Tailwind Svelte</Option>
+                                    <Select color="purple" label="SubCategory">
+                                        {subcategorydata?.data?.map((item , index)=>(
+                                            <Option onClick={()=>setProduclistupdate({...productlistupdate, subcategory: item._id})}>{item.title}</Option>
+                                        ))}                                       
                                     </Select>
-                                    <Input size="md" label="Product Discount" type='number'/>
+                                    <Input size="md" label="Product Review" type='text' value={productlistupdate?.review} onClick={()=>setProduclistupdate({...productlistupdate, review: " "})} onChange={(e)=>setProduclistupdate({...productlistupdate, review: e.target.value})}/>
                                 </div>
                             </div>
-                            <Input size="md" label="Product Price" type='number'/>
+                            <Input size="md" label="Product Rating" type='number' value={productlistupdate?.rating} onClick={()=>setProduclistupdate({...productlistupdate, rating: " "})} onChange={(e)=>setProduclistupdate({...productlistupdate, rating: e.target.value})}/>
                         </div>
                     </div>
-                    <Button variant="filled" color='green' loading={false} className='w-[20%]'>
+                    <Button onClick={handleupdate} variant="filled" color='green' loading={false} className='w-[20%]'>
                         Upload
                     </Button>
                     </div>
