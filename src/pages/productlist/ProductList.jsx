@@ -147,7 +147,7 @@ const ProductList = () => {
                 "product": bestid
             },{
             headers: {
-                    "Content-Type": "application/json",
+                "Content-Type": "application/json",
             }, 
             })
             

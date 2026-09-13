@@ -1,7 +1,26 @@
 import React from 'react'
 import { Button, Select, Option } from '@material-tailwind/react'
+import { useGetAllBestSellingQuery } from '../../../features/api/exclusiveDash'
+import ProductSkeleton from '../../../productskeleton/ProductSkeleton';
 
 const BestSelling = () => {
+
+    const {data , isLoading , isError} = useGetAllBestSellingQuery();
+    
+    if(isLoading){
+        return <ProductSkeleton/>
+    }
+
+    const handledelete = (id) =>{
+        try {
+            console.log(id);
+            
+        } catch (error) {
+            console.error("Error From Handle Delete", error);
+            
+        }
+    }
+    
   return (
     <>  
        {/* BestSelling product list section */}
@@ -28,22 +47,24 @@ const BestSelling = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {[...new Array(10)].map((_ , index)=>(
+                        {data?.data?.map((item , index)=>(
                             <tr class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
                                 <th scope="row" class="px-6 py-4 font-medium text-heading whitespace-nowrap">
-                                    Apple MacBook Pro 17"
+                                    {item?.product?.name}
                                 </th>
                                 <td class="px-6 py-4">
-                                    Silver
+                                    <div className='w-10 h-10 overflow-hidden'>
+                                         <img src={item?.product?.image[0]} alt="Not Found" className='w-full h-full object-cover'/>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    Laptop
+                                    {item?.product?.category?.title}
                                 </td>
                                 <td class="px-6 py-4">
-                                    $2999
+                                    {item?.product?.price}
                                 </td>
                                 <td class="px-6 py-4 flex items-center justify-center gap-x-2">
-                                    <Button color="red">Delete</Button>
+                                    <Button onClick={()=>handledelete(item._id)} color="red">Delete</Button>
                                     <Button color="green">Update</Button>
                                 </td>
                             </tr>
