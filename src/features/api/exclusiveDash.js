@@ -6,7 +6,7 @@ import { fromJSON } from 'postcss'
 export const dashboardApi = createApi({
   reducerPath: 'dashboardApi',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_API || 'http://localhost:4000/api/v1/' }),
-  tagTypes: ["banner", "category", "subcategory", "offer", "product", "bestselling"],
+  tagTypes: ["banner", "category", "subcategory", "offer", "product", "bestselling" , "order"],
   endpoints: (builder) => ({
     uploadbanner: builder.mutation({
       query: (bodyobject) => ({
@@ -164,9 +164,17 @@ export const dashboardApi = createApi({
       query: () => "/bestsellingproduct", 
       providesTags: ["bestselling"]
     }),
+    GetAllorder: builder.query({
+      query: () => "/getallorder", 
+      providesTags: ["order"]
+    }),
+    GetAllSingleorder: builder.query({
+      query: (id) => `/singleorder/${id}`,
+      providesTags: ["order"]
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation , useUploadproductMutation , useGetAllProductQuery , useDeleteProductMutation , useUpdateproductMutation , useGetAllBestSellingQuery} = dashboardApi
+export const { useUploadbannerMutation , useGetAllBannerQuery , useDeleteBannerItemMutation , useUpdateBannerMutation , useUploadcategoryMutation , useGetAllCategoryQuery , useDeleteCategoryItemMutation , useUpdatecategoryMutation , useUploadsubcategooryMutation , useGetAllSubCategoryQuery , useDeleteSubCategoryMutation  , useUpdatesubcategoryMutation , useUploadofferMutation , useGetAllofferQuery , useDeleteofferMutation , useUpdateofferMutation , useUploadproductMutation , useGetAllProductQuery , useDeleteProductMutation , useUpdateproductMutation , useGetAllBestSellingQuery , useGetAllorderQuery , useGetAllSingleorderQuery} = dashboardApi

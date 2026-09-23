@@ -29,10 +29,13 @@ import {
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
 import { IoGiftOutline } from 'react-icons/io5';
+import { useGetAllorderQuery } from '../../features/api/exclusiveDash';
+
 
 const Sidebar = () => {
      const [open, setOpen] = React.useState(0);
- 
+     const {data , isLoading , isError} = useGetAllorderQuery();
+     
      const handleOpen = (value) => {
         setOpen(open === value ? 0 : value);
      };
@@ -165,7 +168,7 @@ const Sidebar = () => {
                 </ListItemPrefix>
                 Order
                 <ListItemSuffix>
-                  <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
+                  <Chip value={data?.data?.length} size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
                 </ListItemSuffix>
               </ListItem>
             </Link>
