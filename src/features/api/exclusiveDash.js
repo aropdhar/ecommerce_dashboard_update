@@ -165,7 +165,14 @@ export const dashboardApi = createApi({
       providesTags: ["bestselling"]
     }),
     GetAllorder: builder.query({
-      query: () => "/getallorder", 
+      query: ({orderstatus , range}) => ({
+      url: "/getallorder",
+      method: "GET",
+      params: {
+          status: orderstatus,
+          range: range,
+        },
+      }), 
       providesTags: ["order"]
     }),
     GetAllSingleorder: builder.query({
